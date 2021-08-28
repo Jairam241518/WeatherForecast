@@ -19,7 +19,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-import org.json.JSONArray;
+
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         longitude = findViewById(R.id.longitude);
 
         weatherImage = findViewById(R.id.imageView);
+        getWeather();
 
     }
 
@@ -77,8 +78,8 @@ public class MainActivity extends AppCompatActivity {
 
                 RequestParams params = new RequestParams();
                 params.put("lat", latitude);
-                params.put("long", longitude);
-                params.put("api_id", API_KEY);
+                params.put("lon", longitude);
+                params.put("appid", API_KEY);
                 getApiData(params);
 
             }
@@ -136,15 +137,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 
-                Toast.makeText(MainActivity.this, "hey", Toast.LENGTH_SHORT).show();
 
+                //super.onSuccess(statusCode, headers, response);
+                Toast.makeText(MainActivity.this, "hey", Toast.LENGTH_SHORT).show();
                 apiData apiData = com.jairam.weatherforecast.apiData.fromJson(response);
                 updateUi(apiData);
-                //super.onSuccess(statusCode, headers, response);
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response) {
                 //super.onFailure(statusCode, headers, responseString, throwable);
                 Toast.makeText(MainActivity.this, "hey", Toast.LENGTH_SHORT).show();
             }
@@ -156,8 +157,10 @@ public class MainActivity extends AppCompatActivity {
         temperature.setText(apiData.getTemperature());
         cityName.setText(apiData.getCity());
         weatherState.setText(apiData.getWeatherType());
-        latitude.setText((CharSequence) latitude);
-        longitude.setText((CharSequence) longitude);
+        longitude.setText("LONGITUDE : " + " " + apiData.getLongitude());
+        latitude.setText("LATITUDE : " + " " + apiData.getLat());
+        maxTemp.setText("max Temp :" + " " + apiData.getMaxTemperature());
+        minTemp.setText("min Temp : " + " " + apiData.getMinTemp());
 
 
     }
